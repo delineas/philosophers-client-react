@@ -8,6 +8,7 @@ class App extends Component {
     quote: ''
   };
   componentDidMount() {
+    const philosophers = [];
     fetch('http://philosophers-api.test/api/v1/authors/3101')
       .then(res => res.json())
       .then(data => {
