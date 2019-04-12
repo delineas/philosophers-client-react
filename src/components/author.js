@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import localStorage from 'local-storage'
 
 class Author extends Component {
   constructor(args) {
@@ -8,14 +9,49 @@ class Author extends Component {
     }
   }
 
+  componentDidMount = () => {
+    this.hydrateWithLocalStorage();
+
+    window.addEventListener(
+      "beforeunload",
+      this.saveToLocalStorage.bind(this)
+    );
+  }
+
+  componentWillUnmount = () => {
+    window.removeEventListener(
+      "beforeunload",
+      this.saveToLocalStorage.bind(this)
+    );
+    this.saveToLocalStorage();
+  }
+
+  hydrateWithLocalStorage = () => {
+    for (let key in this.state) {
+      if (localStorage.hasOwnProperty(key)) {
+        let value = localStorage.get(key);
+        try {
+          value = JSON.parse(value);
+          this.setState({ [key]: value });
+        } catch (e) {
+          this.setState({ [key]: value });
+        }
+      }
+    }
+  }
+
+  saveToLocalStorage = () => {
+    for (let key in this.state) {
+      localStorage.set(key, JSON.stringify(this.state[key]));
+    }
+  }
+
   vote = (id, type) => {
     const votes = [...this.state.votes];
     const updatedVotes = votes.filter(item => item.id !== id);
 
     if (this.isVoted(id, type)) {
-      this.setState({
-        votes: updatedVotes
-      });
+      this.updateVotes(updatedVotes); 
       return;
     }
 
@@ -24,10 +60,14 @@ class Author extends Component {
       type
     });
 
+    this.updateVotes(updatedVotes);    
+  }
+
+  updateVotes = (updatedVotes) => {
     this.setState({
       votes: updatedVotes
     });
-    
+    this.saveToLocalStorage();
   }
 
   isVoted = (id, type) => {
