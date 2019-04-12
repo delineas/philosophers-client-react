@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import localStorage from 'local-storage'
 
 class Author extends Component {
   constructor(args) {
@@ -29,7 +28,7 @@ class Author extends Component {
   hydrateWithLocalStorage = () => {
     for (let key in this.state) {
       if (localStorage.hasOwnProperty(key)) {
-        let value = localStorage.get(key);
+        let value = localStorage.getItem(key);
         try {
           value = JSON.parse(value);
           this.setState({ [key]: value });
@@ -42,16 +41,17 @@ class Author extends Component {
 
   saveToLocalStorage = () => {
     for (let key in this.state) {
-      localStorage.set(key, JSON.stringify(this.state[key]));
+      localStorage.setItem(key, JSON.stringify(this.state[key]));
     }
   }
 
-  vote = (id, type) => {
+  vote = (id, type, handler) => {
     const votes = [...this.state.votes];
     const updatedVotes = votes.filter(item => item.id !== id);
 
     if (this.isVoted(id, type)) {
       this.updateVotes(updatedVotes); 
+      handler()
       return;
     }
 
@@ -61,13 +61,13 @@ class Author extends Component {
     });
 
     this.updateVotes(updatedVotes);    
+    handler()
   }
 
   updateVotes = (updatedVotes) => {
     this.setState({
       votes: updatedVotes
     });
-    this.saveToLocalStorage();
   }
 
   isVoted = (id, type) => {
@@ -76,7 +76,7 @@ class Author extends Component {
   }
 
   render = () => {
-    const { philosopher, quote } = this.props;
+    const { philosopher, quote, action } = this.props;
     return (
       <div className="card">
         <div className="card-image">
@@ -94,14 +94,14 @@ class Author extends Component {
         <footer className="card-footer">
           <p className="card-footer-item">
             <span>
-              <button onClick={() => this.vote(philosopher.id, "up")}
+              <button onClick={() => this.vote(philosopher.id, "up", action)}
                 className={`button is-primary is-fullwidth ${this.isVoted(philosopher.id, "up") ? "is-danger" : "no-voted"}`}
               ><i className="fas fa-thumbs-up"></i></button>
             </span>
           </p>
           <p className="card-footer-item">
             <span>
-              <button onClick={() => this.vote(philosopher.id, "down")}
+              <button onClick={() => this.vote(philosopher.id, "down", action)}
                 className={`button is-primary is-fullwidth ${this.isVoted(philosopher.id, "down") ? "is-danger" : "no-voted"}`}
               ><i className="fas fa-thumbs-down"></i></button>
             </span>

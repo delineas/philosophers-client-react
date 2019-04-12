@@ -7,8 +7,9 @@ class App extends Component {
     philosopher: [],
     quote: ''
   };
-  componentDidMount() {
-    const philosophers = [3101,3121,3125,3285,3264];
+  refreshItem = () => {
+    console.log('hello')
+    const philosophers = [3101, 3121, 3125, 3285, 3264];
     fetch(process.env.REACT_APP_HOST_API + 'authors/' + philosophers[
       Math.floor(Math.random() * philosophers.length)
     ])
@@ -19,12 +20,14 @@ class App extends Component {
           philosopher: data.data.attributes,
           quote:
             data.data.relationships.quotes[
-              Math.floor(Math.random() * data.data.relationships.quotes.length)
+            Math.floor(Math.random() * data.data.relationships.quotes.length)
             ]
         });
       })
       .catch(console.log);
   }
+  handler = () => this.refreshItem()
+  componentDidMount = () => this.refreshItem()
   render() {
     return (
       <div className="columns is-mobile">
@@ -32,6 +35,7 @@ class App extends Component {
           <Author
             philosopher={this.state.philosopher}
             quote={this.state.quote}
+            action={this.handler}
           />
         </div>
       </div>
