@@ -8,10 +8,13 @@ class App extends Component {
     quote: ''
   };
   componentDidMount() {
-    const philosophers = [];
-    fetch('http://philosophers-api.test/api/v1/authors/3101')
+    const philosophers = [3101,3121,3125,3285,3264];
+    fetch(process.env.REACT_APP_HOST_API + 'authors/' + philosophers[
+      Math.floor(Math.random() * philosophers.length)
+    ])
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         this.setState({
           philosopher: data.data.attributes,
           quote:
