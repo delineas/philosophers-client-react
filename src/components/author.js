@@ -8,7 +8,7 @@ class Author extends Component {
     }
   }
 
-  vote(id, type) {
+  vote = (id, type) => {
     const votes = [...this.state.votes];
     const updatedVotes = votes.filter(item => item.id !== id);
 
@@ -30,12 +30,12 @@ class Author extends Component {
     
   }
 
-  isVoted(id, type) {
+  isVoted = (id, type) => {
     const votes = [...this.state.votes];
     return votes.filter(item => item.id === id && item.type === type).length;
   }
 
-  render() {
+  render = () => {
     const { philosopher, quote } = this.props;
     return (
       <div className="card">
@@ -54,16 +54,16 @@ class Author extends Component {
         <footer className="card-footer">
           <p className="card-footer-item">
             <span>
-              <a onClick={() => this.vote(philosopher.id, "up")}
-                className={this.isVoted(philosopher.id, "up") ? "voted" : "no-voted"}
-              ><i className="fas fa-thumbs-up"></i></a>
+              <button onClick={() => this.vote(philosopher.id, "up")}
+                className={`button is-primary is-fullwidth ${this.isVoted(philosopher.id, "up") ? "is-danger" : "no-voted"}`}
+              ><i className="fas fa-thumbs-up"></i></button>
             </span>
           </p>
           <p className="card-footer-item">
             <span>
-              <a onClick={() => this.vote(philosopher.id, "down")}
-                className={this.isVoted(philosopher.id, "down") ? "voted" : "no-voted"}
-              ><i className="fas fa-thumbs-down"></i></a>
+              <button onClick={() => this.vote(philosopher.id, "down")}
+                className={`button is-primary is-fullwidth ${this.isVoted(philosopher.id, "down") ? "is-danger" : "no-voted"}`}
+              ><i className="fas fa-thumbs-down"></i></button>
             </span>
           </p>
         </footer>
