@@ -26,7 +26,6 @@ class App extends Component {
       })
       .catch(console.log);
   }
-  handler = () => this.refreshItem()
   componentDidMount = () => this.refreshItem()
   render() {
     return (
@@ -35,7 +34,7 @@ class App extends Component {
           <Author
             philosopher={this.state.philosopher}
             quote={this.state.quote}
-            action={this.handler}
+            handler={this.refreshItem}
           />
         </div>
       </div>
