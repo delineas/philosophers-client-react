@@ -4,82 +4,84 @@ class Vote extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      votes: []
+      vote: {
+        voteable_id: 0,
+        type: ''
+      }
     };
   }
 
   componentDidMount = () => {
-    this.hydrateWithLocalStorage();
-
-    window.addEventListener('beforeunload', this.saveToLocalStorage.bind(this));
+    // this.hydrateWithLocalStorage();
+    // window.addEventListener('beforeunload', this.saveToLocalStorage.bind(this));
   };
 
   componentWillUnmount = () => {
-    window.removeEventListener(
-      'beforeunload',
-      this.saveToLocalStorage.bind(this)
-    );
-    this.saveToLocalStorage();
+    // window.removeEventListener('beforeunload', this.saveToApi.bind(this));
+    // this.saveToApi();
   };
 
-  hydrateWithLocalStorage = () => {
-    for (let key in this.state) {
-      if (localStorage.hasOwnProperty(key)) {
-        let value = localStorage.getItem(key);
-        try {
-          value = JSON.parse(value);
-          this.setState({ [key]: value });
-        } catch (e) {
-          this.setState({ [key]: value });
-        }
-      }
-    }
+  store = newVote => {
+    fetch(process.env.REACT_APP_HOST_API + 'votes', {
+      method: 'post',
+      body: JSON.stringify(newVote)
+    })
+      .then(function(response) {
+        console.log(response)
+        return response.json();
+      })
+      .then(function(data) {
+        console.log(data);
+      });
   };
 
-  saveToLocalStorage = () => {
-    for (let key in this.state) {
-      localStorage.setItem(key, JSON.stringify(this.state[key]));
-    }
+  update = (updatedVote) => {
+    fetch(process.env.REACT_APP_HOST_API + 'votes/relationship/quote/' + updatedVote.voteable_id, {
+      method: 'put',
+      body: JSON.stringify(updatedVote)
+    })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        console.log(data);
+      });
   };
 
-  vote = (id, action, callback) => {
-    const votes = [...this.state.votes];
-    const updatedVotes = votes.filter(item => item.id !== id);
+  vote = (id, action, votes, callback) => {
 
-    if (this.isVoted(id, action)) {
-      this.updateVotes(updatedVotes);
+    let newVote = {
+      voteable_id: id,
+      type: action
+    };
+    if (this.isVoted(votes)) {
+      console.log(newVote)
+      this.update(newVote);
       callback();
       return;
     }
 
-    updatedVotes.push({
-      id,
-      action
-    });
-
-    this.updateVotes(updatedVotes);
+    this.store(newVote);
     callback();
   };
 
-  updateVotes = updatedVotes => {
+  updateVotes = (newVote) => {
     this.setState({
-      votes: updatedVotes
+      vote: newVote
     });
   };
 
-  isVoted = (id, action) => {
-    const votes = [...this.state.votes];
-    return votes.filter(item => item.id === id && item.action === action)
-      .length;
+  isVoted = (votes) => {
+    return (votes > 0) ? true : false;
   };
 
   render = () => {
-    const { id, action, callback } = this.props;
+    const { id, action, votes, callback } = this.props;
     return (
       <button
-        onClick={() => this.vote(id, action, callback)}
+        onClick={() => this.vote(id, action, votes, callback)}
         className={`button is-primary is-fullwidth ${
-          this.isVoted(id, action) ? 'is-danger' : 'no-voted'
+          this.isVoted(votes) ? 'is-danger' : 'no-voted'
         }`}
       >
         <i className={`fas fa-thumbs-${action}`} />

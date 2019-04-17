@@ -1,27 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
-import Author from './components/author';
+import Quote from './components/quote';
 
 class App extends Component {
   state = {
-    philosopher: [],
-    quote: ''
+    author: [],
+    quote: '',
+    votes: [],
   };
   refreshItem = () => {
-    console.log('hello')
-    const philosophers = [3101, 3121, 3125, 3285, 3264];
-    fetch(process.env.REACT_APP_HOST_API + 'authors/' + philosophers[
-      Math.floor(Math.random() * philosophers.length)
-    ])
+    fetch(process.env.REACT_APP_HOST_API + 'quotes/random')
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         this.setState({
-          philosopher: data.data.attributes,
-          quote:
-            data.data.relationships.quotes[
-            Math.floor(Math.random() * data.data.relationships.quotes.length)
-            ]
+          quote: data.data.attributes,
+          votes: data.data.relationships.vote.meta,
+          author: data.data.relationships.author.attributes
         });
       })
       .catch(console.log);
@@ -31,9 +25,10 @@ class App extends Component {
     return (
       <div className="columns is-mobile">
         <div className="column is-half is-offset-one-quarter">
-          <Author
-            philosopher={this.state.philosopher}
+          <Quote
             quote={this.state.quote}
+            votes={this.state.votes}
+            author={this.state.author}
             handler={this.refreshItem}
           />
         </div>
