@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import * as ApiClient from '../api/ApiClient';
 
 class Vote extends Component {
   constructor(props) {
@@ -22,12 +23,9 @@ class Vote extends Component {
   };
 
   store = newVote => {
-    fetch(process.env.REACT_APP_HOST_API + 'votes', {
-      method: 'post',
-      body: JSON.stringify(newVote)
-    })
+    ApiClient.postQuoteVote(newVote)
       .then(function(response) {
-        console.log(response)
+        console.log(response);
         return response.json();
       })
       .then(function(data) {
@@ -35,11 +33,8 @@ class Vote extends Component {
       });
   };
 
-  update = (updatedVote) => {
-    fetch(process.env.REACT_APP_HOST_API + 'votes/relationship/quote/' + updatedVote.voteable_id, {
-      method: 'put',
-      body: JSON.stringify(updatedVote)
-    })
+  update = updatedVote => {
+    ApiClient.putQuoteVote(updatedVote)
       .then(function(response) {
         return response.json();
       })
@@ -49,13 +44,12 @@ class Vote extends Component {
   };
 
   vote = (id, action, votes, callback) => {
-
     let newVote = {
       voteable_id: id,
       type: action
     };
     if (this.isVoted(votes)) {
-      console.log(newVote)
+      console.log(newVote);
       this.update(newVote);
       callback();
       return;
@@ -65,14 +59,14 @@ class Vote extends Component {
     callback();
   };
 
-  updateVotes = (newVote) => {
+  updateVotes = newVote => {
     this.setState({
       vote: newVote
     });
   };
 
-  isVoted = (votes) => {
-    return (votes > 0) ? true : false;
+  isVoted = votes => {
+    return votes > 0 ? true : false;
   };
 
   render = () => {

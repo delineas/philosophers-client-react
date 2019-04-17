@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
+import * as ApiClient from './api/ApiClient';
 import Quote from './components/quote';
 
 class App extends Component {
   state = {
     author: [],
     quote: '',
-    votes: [],
+    votes: []
   };
   refreshItem = () => {
-    fetch(process.env.REACT_APP_HOST_API + 'quotes/random')
+    ApiClient.get('quotes/random')
       .then(res => res.json())
       .then(data => {
         this.setState({
@@ -19,8 +20,8 @@ class App extends Component {
         });
       })
       .catch(console.log);
-  }
-  componentDidMount = () => this.refreshItem()
+  };
+  componentDidMount = () => this.refreshItem();
   render() {
     return (
       <div className="columns is-mobile">

@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import Vote from './vote'
+import React, { Component } from 'react';
+import Vote from './vote';
 
 class Quote extends Component {
-
   render = () => {
     const { quote, votes, author, handler } = this.props;
     return (
@@ -27,8 +26,7 @@ class Quote extends Component {
                 action="up"
                 votes={votes.up}
                 callback={handler}
-              />{' '}
-              {votes.up}
+              />
             </span>
           </p>
           <p className="card-footer-item">
@@ -38,14 +36,13 @@ class Quote extends Component {
                 action="down"
                 votes={votes.down}
                 callback={handler}
-              />{' '}
-              {votes.down}
+              />
             </span>
           </p>
         </footer>
       </div>
     );
-  }
+  };
 }
 
 export default Quote;
