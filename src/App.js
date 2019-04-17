@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as ApiClient from './api/ApiClient';
-import Quote from './components/quote';
+import Quote from './components/Quote';
 
 class App extends Component {
   state = {

@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import Vote from './vote'
+import React, { Component } from 'react';
+import Vote from './Vote';
 
 class Author extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render = () => {
@@ -36,7 +36,7 @@ class Author extends Component {
         </footer>
       </div>
     );
-  }
+  };
 }
 
 export default Author;
