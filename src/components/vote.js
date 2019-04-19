@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as ApiClient from '../api/ApiClient';
+import * as ApiClient from '../services/ApiClient';
 
 class Vote extends Component {
   constructor(props) {
