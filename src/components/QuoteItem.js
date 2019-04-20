@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import Vote from './Vote';
 
-class Quote extends Component {
+class QuoteItem extends Component {
   render = () => {
-    const { quote, votes, author, handler } = this.props;
+    const { quote, votes, author } = this.props;
     return (
       <div className="card">
         <div className="card-image">
@@ -20,24 +19,10 @@ class Quote extends Component {
         </div>
         <footer className="card-footer">
           <p className="card-footer-item">
-            <span>
-              <Vote
-                id={quote.id}
-                action="up"
-                votes={votes.up}
-                callback={handler}
-              />
-            </span>
+            <span>Up: {votes.up}</span>
           </p>
           <p className="card-footer-item">
-            <span>
-              <Vote
-                id={quote.id}
-                action="down"
-                votes={votes.down}
-                callback={handler}
-              />
-            </span>
+            <span>Down: {votes.down}</span>
           </p>
         </footer>
       </div>
@@ -45,4 +30,4 @@ class Quote extends Component {
   };
 }
 
-export default Quote;
+export default QuoteItem;
