@@ -30,7 +30,7 @@ class QuoteList extends Component {
           pageNext = data.links.next;
         }
         this.setState(prevState => ({
-          quotes: [...prevState.quotes, data.data],
+          quotes: prevState.quotes.concat(data.data),
           pageNext
         }));
       })
