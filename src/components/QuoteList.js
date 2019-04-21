@@ -20,22 +20,23 @@ class QuoteList extends Component {
     response
       .json()
       .then(data => {
-        let pageNext = '';
-        if (data.links.next != null) {
-          pageNext = data.links.next.replace(
-            process.env.REACT_APP_HOST_API,
-            ''
-          );
-        } else {
-          pageNext = data.links.next;
-        }
         this.setState(prevState => ({
           quotes: prevState.quotes.concat(data.data),
-          pageNext
+          pageNext: this.setPageNext(data.links.next)
         }));
       })
       .catch(console.log);
   };
+
+  setPageNext = (page = null) => {
+    if(page != null) {
+      return page.replace(
+        process.env.REACT_APP_HOST_API,
+        ''
+      );
+    }
+    return page;
+  }
 
   renderList = () => {
     const quotes = this.state.quotes;
@@ -53,12 +54,18 @@ class QuoteList extends Component {
   };
 
   render() {
-    return (
-      <div>
-        {this.renderList()}
+    let button = ''
+    if(this.state.pageNext != null) {
+      button = (
         <button className="button" onClick={this.loadMore}>
           Ver más
         </button>
+      );
+    }
+    return (
+      <div>
+        {this.renderList()}
+        {button}
       </div>
     );
   }

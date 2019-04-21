@@ -12,16 +12,6 @@ class Vote extends Component {
     };
   }
 
-  componentDidMount = () => {
-    // this.hydrateWithLocalStorage();
-    // window.addEventListener('beforeunload', this.saveToLocalStorage.bind(this));
-  };
-
-  componentWillUnmount = () => {
-    // window.removeEventListener('beforeunload', this.saveToApi.bind(this));
-    // this.saveToApi();
-  };
-
   store = newVote => {
     ApiClient.postQuoteVote(newVote)
       .then(function(response) {
