@@ -54,18 +54,14 @@ class QuoteList extends Component {
   };
 
   render() {
-    let button = ''
-    if(this.state.pageNext != null) {
-      button = (
-        <button className="button" onClick={this.loadMore}>
-          Ver más
-        </button>
-      );
-    }
     return (
       <div>
         {this.renderList()}
-        {button}
+        {this.state.pageNext != null && (
+          <button className="button" onClick={this.loadMore}>
+            Ver más
+          </button>
+        )}
       </div>
     );
   }
