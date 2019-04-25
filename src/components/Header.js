@@ -4,9 +4,8 @@ import { NavLink } from 'react-router-dom';
 const Header = () => (
   <nav className="navbar is-danger" role="navigation" aria-label="main navigation">
     <div className="navbar-brand">
-      <img src="/philotinder.png" style={{height: '50px'}}></img>
-      <a
-        role="button"
+      <img src="/philotinder.png" style={{height: '50px'}} alt="" />
+      <button
         className="navbar-burger burger"
         aria-label="menu"
         aria-expanded="false"
@@ -15,7 +14,7 @@ const Header = () => (
         <span aria-hidden="true" />
         <span aria-hidden="true" />
         <span aria-hidden="true" />
-      </a>
+      </button>
     </div>
     <div id="navbarBasicExample" className="navbar-menu">
       <div className="navbar-start">
