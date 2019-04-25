@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import * as ApiClient from '../services/ApiClient';
 import QuoteItem from './QuoteItem';
+import { connect } from 'react-redux';
+import { fetchQuotes } from '../actions';
 
 class QuoteList extends Component {
   constructor(props) {
@@ -12,7 +14,8 @@ class QuoteList extends Component {
   }
 
   componentDidMount = () => {
-    this.loadMore();
+    //this.loadMore();
+    this.props.fetchQuotes();
   };
 
   loadMore = async () => {
@@ -39,7 +42,8 @@ class QuoteList extends Component {
   }
 
   renderList = () => {
-    const quotes = this.state.quotes;
+    const quotes = this.props.quotes;
+    if (this.props.quotes.map != 'function') return;
     return quotes.map(quote => {
       console.log(quote);
       return (
@@ -54,6 +58,7 @@ class QuoteList extends Component {
   };
 
   render() {
+    console.log(this.props)
     return (
       <div>
         {this.renderList()}
@@ -67,4 +72,11 @@ class QuoteList extends Component {
   }
 }
 
-export default QuoteList;
+function mapStateToProps(state) {
+  return { quotes: state };
+}
+
+export default connect(
+  mapStateToProps,
+  { fetchQuotes }
+)(QuoteList);

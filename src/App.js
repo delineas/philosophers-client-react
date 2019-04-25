@@ -3,8 +3,7 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  Redirect
+  Switch
 } from 'react-router-dom';
 
 import QuoteRandomScreen from './screens/QuoteRandomScreen';
@@ -12,21 +11,30 @@ import QuoteListScreen from './screens/QuoteListScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
 import Header from './components/Header';
 
+import reducers from './reducers';
+import { logger } from './middlewares';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+
+const store = createStore(reducers, applyMiddleware(logger, thunk));
+
 class App extends Component {
-  
   render() {
     return (
       <>
-        <Router>
-          <Header />
-          <section className="section">
-            <Switch>
-              <Route path="/" exact component={QuoteRandomScreen} />
-              <Route path="/list" component={QuoteListScreen} />
-              <Route component={NotFoundScreen} />
-            </Switch>
-          </section>
-        </Router>
+        <Provider store={store}>
+          <Router>
+            <Header />
+            <section className="section">
+              <Switch>
+                <Route path="/" exact component={QuoteRandomScreen} />
+                <Route path="/list" component={QuoteListScreen} />
+                <Route component={NotFoundScreen} />
+              </Switch>
+            </section>
+          </Router>
+        </Provider>
       </>
     );
   }
