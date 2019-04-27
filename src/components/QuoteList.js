@@ -8,7 +8,6 @@ class QuoteList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quotes: [],
       pageNext: 'quotes'
     };
   }
@@ -42,9 +41,9 @@ class QuoteList extends Component {
   }
 
   renderList = () => {
-    const quotes = this.props.quotes;
-    if (this.props.quotes.map != 'function') return;
-    return quotes.map(quote => {
+    // const quotes = this.props.quotes;
+    // if (this.props.quotes.map != 'function') return;
+    return this.props.quotes.map(quote => {
       console.log(quote);
       return (
         <QuoteItem
