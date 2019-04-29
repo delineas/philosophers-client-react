@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as ApiClient from '../services/ApiClient';
 import QuoteItem from './QuoteItem';
 import { connect } from 'react-redux';
-import { fetchQuotes } from '../actions';
+import * as actions from '../actions';
 
 class QuoteList extends Component {
   constructor(props) {
@@ -14,7 +14,9 @@ class QuoteList extends Component {
 
   componentDidMount = () => {
     //this.loadMore();
-    this.props.fetchQuotes();
+    //this.props.fetchQuotes();
+    console.log('willMount', this.props);
+    this.props.fetchQuoteP();
   };
 
   loadMore = async () => {
@@ -31,14 +33,11 @@ class QuoteList extends Component {
   };
 
   setPageNext = (page = null) => {
-    if(page != null) {
-      return page.replace(
-        process.env.REACT_APP_HOST_API,
-        ''
-      );
+    if (page != null) {
+      return page.replace(process.env.REACT_APP_HOST_API, '');
     }
     return page;
-  }
+  };
 
   renderList = () => {
     // const quotes = this.props.quotes;
@@ -56,11 +55,18 @@ class QuoteList extends Component {
     });
   };
 
+  renderQuote = ({data}) => {
+    // const quotes = this.props.quotes;
+    // if (this.props.quotes.map != 'function') return;
+    console.log(data);
+  };
+
   render() {
-    console.log(this.props)
+    console.log('adios', this.props.quotes);
+
     return (
       <div>
-        {this.renderList()}
+        {/* {this.props.quotes.map(this.renderQuote)} */}
         {this.state.pageNext != null && (
           <button className="button" onClick={this.loadMore}>
             Ver más
@@ -72,10 +78,25 @@ class QuoteList extends Component {
 }
 
 function mapStateToProps(state) {
-  return { quotes: state };
+  console.log('mapStateToProps', state);
+  return {
+    quotes: state.quotes
+  };
 }
+
+// export default connect(
+//   mapStateToProps,
+//   { fetchQuotes, fetchQuoteP }
+// )(QuoteList);
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchQuoteP: () => dispatch(actions.fetchQuoteP())
+  };
+};
+
 
 export default connect(
   mapStateToProps,
-  { fetchQuotes }
+  mapDispatchToProps
 )(QuoteList);

@@ -17,7 +17,9 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
-const store = createStore(reducers, { fetchQuotes: [] }, applyMiddleware(thunk));
+//const store = createStore(reducers, { fetchQuotes: [] }, applyMiddleware(thunk));
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const store = createStoreWithMiddleware(reducers);
 
 class App extends Component {
   render() {
