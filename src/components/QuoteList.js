@@ -55,7 +55,7 @@ class QuoteList extends Component {
 
     return (
       <div>
-        {this.props.quotes.map(this.renderQuote)}
+        {/* {this.props.quotes.map(this.renderQuote)} */}
         {this.state.pageNext != null && (
           <button className="button" onClick={this.loadMore}>
             Ver más
@@ -67,9 +67,8 @@ class QuoteList extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    quotes: state.quotes
-  };
+  console.log(state)
+  return state;
 }
 
 

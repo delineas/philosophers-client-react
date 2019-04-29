@@ -13,7 +13,7 @@ export const fetchQuotes = () => {
         console.log(data)
         dispatch({
           type: FETCH_QUOTES,
-          payload: data.data,
+          quotes: data.data,
           links: data.links
         });
       })
