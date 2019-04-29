@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as ApiClient from '../services/ApiClient';
 import QuoteItem from './QuoteItem';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import { fetchQuotes }  from '../actions';
 
 class QuoteList extends Component {
   constructor(props) {
@@ -14,9 +14,9 @@ class QuoteList extends Component {
 
   componentDidMount = () => {
     //this.loadMore();
-    //this.props.fetchQuotes();
+    this.props.fetchQuotes();
     console.log('willMount', this.props);
-    this.props.fetchQuoteP();
+    //this.props.fetchQuoteP();
   };
 
   loadMore = async () => {
@@ -39,34 +39,23 @@ class QuoteList extends Component {
     return page;
   };
 
-  renderList = () => {
-    // const quotes = this.props.quotes;
-    // if (this.props.quotes.map != 'function') return;
-    return this.props.quotes.map(quote => {
-      console.log(quote);
-      return (
-        <QuoteItem
-          key={quote.id}
-          quote={quote.attributes}
-          author={quote.relationships.author.attributes}
-          votes={quote.relationships.vote.meta}
-        />
-      );
-    });
-  };
-
-  renderQuote = ({data}) => {
-    // const quotes = this.props.quotes;
-    // if (this.props.quotes.map != 'function') return;
-    console.log(data);
+  renderQuote = (quote) => {
+    return (
+      <QuoteItem
+        key={quote.id}
+        quote={quote.attributes}
+        author={quote.relationships.author.attributes}
+        votes={quote.relationships.vote.meta}
+      />
+    );
   };
 
   render() {
-    console.log('adios', this.props.quotes);
+    console.log('renderQuoteList', this.props);
 
     return (
       <div>
-        {/* {this.props.quotes.map(this.renderQuote)} */}
+        {this.props.quotes.map(this.renderQuote)}
         {this.state.pageNext != null && (
           <button className="button" onClick={this.loadMore}>
             Ver más
@@ -78,25 +67,13 @@ class QuoteList extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('mapStateToProps', state);
   return {
     quotes: state.quotes
   };
 }
 
-// export default connect(
-//   mapStateToProps,
-//   { fetchQuotes, fetchQuoteP }
-// )(QuoteList);
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchQuoteP: () => dispatch(actions.fetchQuoteP())
-  };
-};
-
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {fetchQuotes}
 )(QuoteList);
