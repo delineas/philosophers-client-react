@@ -40,13 +40,18 @@ class QuoteList extends Component {
   };
 
   renderQuote = (quote) => {
+    console.log('renderQuote', quote);
     return (
-      <QuoteItem
-        key={quote.id}
-        quote={quote.attributes}
-        author={quote.relationships.author.attributes}
-        votes={quote.relationships.vote.meta}
-      />
+      <>
+        {quote.relationships && (
+          <QuoteItem
+            key={quote.id}
+            quote={quote.attributes}
+            author={quote.relationships.author.attributes}
+            votes={quote.relationships.vote.meta}
+          />
+        )}
+      </>
     );
   };
 
@@ -55,7 +60,7 @@ class QuoteList extends Component {
 
     return (
       <div>
-        {this.props.quotes.map(this.renderQuote)}
+        {this.props.quotes.map(item => this.renderQuote(item))}
         {this.state.pageNext != null && (
           <button className="button" onClick={this.loadMore}>
             Ver más
