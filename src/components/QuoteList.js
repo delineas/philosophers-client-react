@@ -19,20 +19,12 @@ class QuoteList extends Component {
     //this.props.fetchQuoteP();
   };
 
-  loadMore = async () => {
-    const response = await ApiClient.get(this.state.pageNext);
-    response
-      .json()
-      .then(data => {
-        this.setState(prevState => ({
-          quotes: prevState.quotes.concat(data.data),
-          pageNext: this.setPageNext(data.links.next)
-        }));
-      })
-      .catch(console.log);
+  loadMore = () => {
+    this.props.fetchQuotes(this.setPageNext(this.props.links.next));
   };
 
   setPageNext = (page = null) => {
+    console.log(page, process.env.REACT_APP_HOST_API);
     if (page != null) {
       return page.replace(process.env.REACT_APP_HOST_API, '');
     }
@@ -40,18 +32,13 @@ class QuoteList extends Component {
   };
 
   renderQuote = (quote) => {
-    console.log('renderQuote', quote);
     return (
-      <>
-        {quote.relationships && (
-          <QuoteItem
-            key={quote.id}
-            quote={quote.attributes}
-            author={quote.relationships.author.attributes}
-            votes={quote.relationships.vote.meta}
-          />
-        )}
-      </>
+      <QuoteItem
+        key={quote.id}
+        quote={quote.attributes}
+        author={quote.relationships.author.attributes}
+        votes={quote.relationships.vote.meta}
+      />
     );
   };
 
@@ -60,8 +47,8 @@ class QuoteList extends Component {
 
     return (
       <div>
-        {this.props.quotes.map(item => this.renderQuote(item))}
-        {this.state.pageNext != null && (
+        {this.props.quotes.map(this.renderQuote)}
+        {this.props.links.next != null && (
           <button className="button" onClick={this.loadMore}>
             Ver más
           </button>
@@ -73,7 +60,9 @@ class QuoteList extends Component {
 
 function mapStateToProps(state) {
   return {
-    quotes: state.quotes
+    quotes: state.quotes.quotes,
+    links: state.quotes.links,
+    fetchQuotes
   };
 }
 

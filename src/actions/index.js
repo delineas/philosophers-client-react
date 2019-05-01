@@ -2,10 +2,10 @@ import * as ApiClient from '../services/ApiClient';
 
 export const FETCH_QUOTES = 'quotes';
 
-export const fetchQuotes = () => {
+export const fetchQuotes = (page = 'quotes') => {
 
   return async dispatch => {
-    const response = await ApiClient.get('quotes');
+    const response = await ApiClient.get(page);
 
     response
       .json()
@@ -13,7 +13,8 @@ export const fetchQuotes = () => {
         console.log(data)
         dispatch({
           type: FETCH_QUOTES,
-          payload: data.data
+          payload: data.data,
+          links: data.links
         });
       })
       .catch(console.log);
